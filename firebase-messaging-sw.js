@@ -50,7 +50,7 @@ messaging.setBackgroundMessageHandler(function(payload) {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
   // Customize notification here
     const notificationTitle = 'call';
-    var packet = Json.parseFromString(payload.data);
+    var packet = JSON.parse(payload.data);
     const notificationOptions = {
         body: '来自 ' + packet.data.clNm + '电话',
         icon: 'firebase-logo.png'
