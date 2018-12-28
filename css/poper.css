@@ -1,0 +1,49 @@
+
+.pop-down{
+    position: absolute;
+    display: none;
+    top: 10px;
+    min-width: 200px;
+    max-width: 600px;
+    border: 1px solid #e4e4e4;
+    z-index: 100;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, .25);
+}
+.pop-down .down{
+    width: 0;
+    border-color: #f4f4f4;
+    position: relative;
+}
+.pop-down .down:after {
+    content: "";
+    border: 10px solid transparent;
+    border-top-width: 2px;
+    border-bottom-color: inherit;
+    position: absolute;
+    top: -12px;
+}
+.pop-down .title {
+    background: #f4f4f4;
+    padding: 10px 20px;
+}
+.pop-down .content {
+    background: #ffffff;
+}
+.pop-down .content ul {
+    list-style: none;
+    padding: 10px 0;
+    max-height: 400px;
+    overflow: hidden;
+    margin: 0;
+}
+.pop-down .content ul:hover{
+    overflow: auto;
+}
+.pop-down .content ul li {
+    padding: 5px 20px;
+    font: 14px Arial,SimSun;
+}
+.pop-down .content ul li:hover{
+    background: #aaaaaa;
+    cursor: pointer;
+}

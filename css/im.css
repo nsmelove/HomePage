@@ -1,0 +1,511 @@
+
+@keyframes twinkle
+{
+    0%   {opacity: 1;}
+    80%   {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+@-moz-keyframes twinkle /* Firefox */
+{
+    0%   {opacity: 1;}
+    80%   {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+@-webkit-keyframes twinkle /* Safari 和 Chrome */
+{
+    0%   {opacity: 1;}
+    80%   {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+@-o-keyframes twinkle /* Opera */
+{
+    0%   {opacity: 1;}
+    80%   {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+[status="0"] img{
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+}
+.contacts{
+    position: fixed;
+    display: block;
+    background: #ffffff url("../img/backgroud.jpeg") no-repeat;
+    height: 500px;
+    width: 260px;
+    box-shadow: 1px 1px 25px rgba(0,0,0,0.5);
+    overflow: hidden;
+}
+
+.contacts .contacts-head{
+    background-color: #b5b5b5;
+    opacity:0.9;
+}
+
+.contacts .contacts-head .layui-icon-close {
+    position: absolute;
+    top: 12px;
+    right: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.contacts .contacts-head .layui-icon-close:hover {
+    opacity:0.6;
+}
+.contacts .contacts-head .move{
+    position: absolute;
+    height: 30px;
+    width: 170px;
+    top: 0px;
+    left: 60px;
+    background-color: transparent;
+    cursor: move;
+}
+
+.contacts .contacts-head .user-info{
+    position: relative;
+    padding: 5px;
+}
+.contacts .contacts-head .user-info img {
+    position: absolute;
+    left: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.contacts .contacts-head .user-info .upload-icon {
+    position: absolute;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    align-items:flex-end;
+    left: 10px;
+    width: 50px;
+    height: 50px;
+    verticalAlign: bottom;
+    color: rgba(255,255,255,0);
+}
+.contacts .contacts-head .user-info .upload-icon:hover {
+    color: rgba(255,255,255,1);
+}
+.contacts .contacts-head .user-info .upload-icon .layui-icon {
+    font-size: 20px;
+    line-height: 15px;
+    cursor: pointer;
+}
+.contacts .contacts-head .user-info .upload-icon .layui-icon:hover {
+    font-size: 20px;
+    cursor: pointer;
+}
+.contacts .contacts-head .user-info .upload-icon input{
+    display: none;
+}
+.contacts .contacts-head .user-info .name{
+    margin-left: 60px;
+    padding: 3px;
+    font-size: 18px;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.contacts .contacts-head .user-info input {
+    margin-left: 60px;
+    padding: 3px;
+    background: transparent;
+    font-size: 12px;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid transparent;
+}
+.contacts .contacts-head .user-info input:hover {
+    border-color: #959595;
+}
+
+.contacts .contacts-head .user-info input:focus{
+    background-color: rgba(255,255,255,1);
+}
+.contacts .contacts-head ul {
+    padding: 10px 0px;
+    cursor: pointer;
+}
+
+.contacts .contacts-head ul li {
+    display: inline-block;
+    list-style: none;
+    width: 33.33%;
+    text-align: center;
+    font-size: 24px;
+    color: #444444;
+    position: relative;
+
+}
+
+.contacts .contacts-head ul li:hover {
+    opacity:0.6;
+}
+
+.contacts .contacts-head ul li[checked]:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    width: 100%;
+    height: 3px;
+    background-color: #3FDD86;
+    z-index: 2000;
+}
+
+.contacts .contacts-content{
+    box-sizing: border-box;
+    background-color: #ffffff;
+    opacity:0.9;
+    padding: 10px;
+    cursor: pointer;
+    height: 356px;
+    overflow-y: hidden;
+}
+
+.contacts .contacts-content:hover{
+    overflow-y: auto;
+}
+
+.contacts .contacts-content ul{
+    /*display: none;*/
+}
+
+.contacts .contacts-content h5,
+.contacts .contacts-content ul {
+    margin-top: 3px;
+}
+
+.contacts .contacts-content .layui-icon{
+    opacity:0.6;
+}
+
+.contacts .contacts-content li {
+    position: relative;
+    display: block;
+    list-style: none;
+    height: 45px;
+    padding: 3px 15px 0px 50px;
+}
+
+.contacts .contacts-content li img {
+    position: absolute;
+    left: 0px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+
+.contacts .contacts-content li .sign {
+    font-size: 12px;
+    color: #999999;
+    line-height: 25px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.contacts .contacts-content .loading {
+    position: relative;
+    top: 40%;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    margin: auto;
+}
+
+.contacts .contacts-content .loading .layui-icon-loading{
+    font-size: 40px;
+}
+
+.contacts .contacts-tool {
+    padding: 5px;
+    background-color: #f5f5f5;
+}
+
+.contacts .contacts-tool li{
+    list-style: none;
+    display: inline-block;
+    width: 20%;
+}
+
+.contacts .contacts-tool li .layui-icon {
+    font-size: 24px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.contacts .contacts-tool .contact-notice{
+    position: relative;
+}
+.contacts .contacts-tool .contact-notice[data-count]:after{
+    content: attr(data-count);
+    position: absolute;
+    top: 0;
+    right: 10px;
+    display: block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #3FDD8a;
+    text-align: center;
+    color: #ffffff;
+    font-size: 10px;
+    animation: twinkle 1s infinite;
+    -webkit-animation: twinkle 1s infinite;  /*Safari 和 Chrome */
+}
+
+/*聊天对话框*/
+.chat-dialog{
+    position: fixed;
+    top: 20%;
+    left: 30%;
+    box-shadow: 1px 1px 25px rgba(0,0,0,0.5);;
+    background-color: #e2e2e2;
+}
+.chat-dialog * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.chat-dialog .chat-list{
+    display: inline-block;
+    vertical-align: top;
+    width: 160px;
+    height: 600px;
+    background-color: #b1b1b1;
+    overflow-y: hidden;
+}
+.chat-dialog .chat-list:hover{
+    overflow-y: auto;
+}
+.chat-dialog .chat-list::-webkit-scrollbar{
+    width: 3px;
+    background-color: transparent;
+}
+.chat-dialog .chat-list::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    border-radius: 3px;
+    background: #888;
+}
+
+.chat-dialog .chat-list ul {
+    margin-top: 10px;
+
+}
+.chat-dialog .chat-list li {
+    position: relative;
+    margin: 5px 5px;
+    padding: 5px;
+    font-size: 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.chat-dialog .chat-list li[select] {
+    background-color: #ffffff;
+}
+.chat-dialog .chat-list li:hover {
+    background-color: #ffffff;
+}
+.chat-dialog .chat-list li img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.chat-dialog .chat-list li .name {
+    margin-left: 5px;
+}
+.chat-dialog .chat-list li .close {
+    background: transparent;
+    opacity : 0;
+    position: absolute;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+.chat-dialog .chat-list li .close:hover {
+    opacity : 0.8;
+}
+.chat-dialog .chat-list li .close .layui-icon {
+    font-size: 20px;
+}
+.chat-dialog .chat-list li .close .layui-icon:hover {
+    opacity : 0.6;
+}
+.chat-dialog .chat-main{
+    background: #ffffff url("../img/backgroud.jpeg");
+    display: inline-block;
+    vertical-align: top;
+    width: 600px;
+    height: 600px;
+}
+
+.chat-dialog .chat-main .close{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+    font-weight:bold;
+    cursor: pointer;
+}
+.chat-dialog .chat-main .close:hover{
+    opacity: 0.6;
+}
+.chat-dialog .chat-main .user-info{
+    display: flex;
+    background-color: rgba(200,200,200, 0.9);
+    height: 80px;
+    padding: 10px;
+}
+.chat-dialog .chat-main .user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+}
+.chat-dialog .chat-main .user-info .nick-name {
+    position: relative;
+    display: inline-block;
+    height: 45px;
+    font-size: 16px;
+    margin: 5px 10px;
+}
+.chat-dialog .chat-main .user-info .nick-name[inputting]:after{
+    content: "正在输入中...";
+    width: 100px;
+    font-size: 12px;
+    position: absolute;
+    left: 0;
+    top: 25px;
+}
+.chat-dialog .chat-main .msg-show {
+    background-color: rgba(255,255,255, 0.6);
+    height: 330px;
+    padding: 10px;
+    overflow: hidden;
+}
+.chat-dialog .chat-main .msg-show:hover {
+    overflow-y: scroll;
+    padding-right: 7px;
+}
+.chat-dialog .chat-main .msg-show::-webkit-scrollbar{
+    width: 3px;
+    background-color: transparent;
+}
+.chat-dialog .chat-main .msg-show::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 3px;
+}
+.chat-dialog .chat-main .msg-show li{
+    overflow:hidden;
+}
+.chat-dialog .chat-main .msg-show li * {
+    float: left;
+}
+.chat-dialog .chat-main .msg-show li.mine *{
+    float: right;
+}
+.chat-dialog .chat-main .msg-show li img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+.chat-dialog .chat-main .msg-show li .name{
+    font-size: 12px;
+    line-height: 12px;
+    padding: 6px 15px;
+    color: #999;
+}
+.chat-dialog .chat-main .msg-show li .time{
+    font-size: 12px;
+    line-height: 12px;
+    padding: 6px 0 0;
+    color: #999;
+}
+.chat-dialog .chat-main .msg-show li .content {
+    position: relative;
+    background: #e1e1e1;
+    padding: 10px;
+    margin: -10px 50px 0;
+    border-radius: 3px;
+    clear: both;
+    line-height: 25px;
+}
+.chat-dialog .chat-main .msg-show li .content:after {
+    position: absolute;
+    content: "";
+    top:10px;
+    border: 10px solid transparent;
+    border-top-color: #e1e1e1;
+
+}
+.chat-dialog .chat-main .msg-show li:not(.mine) .content:after{
+    left: -10px;
+}
+.chat-dialog .chat-main .msg-show li.mine .content {
+    background: #69BC80;
+}
+.chat-dialog .chat-main .msg-show li.mine .content:after {
+    right: -10px;
+    border-top-color: #69BC80;
+}
+
+.chat-dialog .chat-main .chat-tool{
+    background-color: rgba(240,240,240, 0.6);
+    height: 40px;
+}
+.chat-dialog .chat-main .chat-tool li {
+    display: inline-block;
+    padding: 7px;
+}
+.chat-dialog .chat-main .chat-tool li .layui-icon {
+    font-size: 24px;
+    cursor: pointer;
+}
+.chat-dialog .chat-main .msg-input{
+    background-color: rgba(255,255,255, 0.6);
+}
+.chat-dialog .chat-main .msg-input textarea{
+    background-color: transparent;
+    width: 100%;
+    height: 100px;
+    border: none;
+    resize: none;
+    padding: 10px;
+}
+.chat-dialog .chat-main .msg-send{
+    background-color: rgba(255,255,255, 0.6);
+    height: 45px;
+    padding: 5px;
+}
+.chat-dialog .chat-main .msg-send button {
+    background-color: #69BC80;
+    float: right;
+    margin-left: 10px;
+    width: 80px;
+    height: 35px;
+    border: none;
+    border-radius: 5%;
+    cursor: pointer;
+}

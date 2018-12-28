@@ -1,0 +1,26 @@
+body{
+    background-color: #e2e2e2;
+    height: 100%;
+}
+.header{
+    background-color:#393D49;
+}
+.header .main, .body .main{
+    position: relative;
+    width: 1140px;
+    margin: 0 auto;
+}
+.header .main .user-nav {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.body .main {
+    padding: 20px;
+}
+
+.body .main .menu{
+   /* background-color: #ffffff;
+    height: 800px;*/
+}
