@@ -176,6 +176,7 @@
             poper.popDown($("#msg"), "所有消息", ["1111","22222"]);
             poper.popDown($("#home"), "首页", ["aaaaaaa","zzzzzzzz"]);
             var userInfo = {
+                userId: 110,
                 name: "上善若水",
                 sign: "已开消息免打扰，有什么事情，亲电话call我"
             };
@@ -188,8 +189,11 @@
             function getHis(callback){
                 setTimeout(()=>$.get("json/history_list.json", callback), 100);
             };
-            im.init(userInfo, getContacts, getGroup, getHis);
-            im.init(userInfo, getContacts, getGroup, getHis);
+            function getMsgHis(userId, lastMsgId, limit, callback){
+                return [];
+            };
+            im.init(userInfo, getContacts, getGroup, getHis, undefined);
+            im.init(userInfo, getContacts, getGroup, getHis, undefined);
         });
     </script>
 </body>

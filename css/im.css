@@ -65,6 +65,10 @@
     left: 60px;
     background-color: transparent;
     cursor: move;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none
 }
 
 .contacts .contacts-head .user-info{
@@ -270,13 +274,14 @@
     -webkit-animation: twinkle 1s infinite;  /*Safari 和 Chrome */
 }
 
-/*聊天对话框*/
+/**聊天对话框*/
 .chat-dialog{
     position: fixed;
-    top: 20%;
-    left: 30%;
     box-shadow: 1px 1px 25px rgba(0,0,0,0.5);;
     background-color: #e2e2e2;
+    width: 600px;
+    height: 600px;
+    overflow: hidden;
 }
 .chat-dialog * {
     -webkit-box-sizing: border-box;
@@ -318,12 +323,15 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.chat-dialog .chat-list li[select] {
-    background-color: #ffffff;
-}
+
 .chat-dialog .chat-list li:hover {
+    background-color: #dddddd;
+}
+
+.chat-dialog .chat-list li.select {
     background-color: #ffffff;
 }
+
 .chat-dialog .chat-list li img {
     width: 40px;
     height: 40px;
@@ -357,12 +365,13 @@
 .chat-dialog .chat-main{
     background: #ffffff url("../img/backgroud.jpeg");
     display: inline-block;
+    position: relative;
     vertical-align: top;
     width: 600px;
     height: 600px;
 }
 
-.chat-dialog .chat-main .close{
+.chat-dialog .chat-main .close-all{
     position: absolute;
     top: 10px;
     right: 10px;
@@ -370,8 +379,21 @@
     font-weight:bold;
     cursor: pointer;
 }
-.chat-dialog .chat-main .close:hover{
+.chat-dialog .chat-main .close-all:hover{
     opacity: 0.6;
+}
+.chat-dialog .chat-main .move{
+    background: transparent;
+    position: absolute;
+    height: 60px;
+    width: 300px;
+    top:10px;
+    left: 180px;
+    cursor: move;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 .chat-dialog .chat-main .user-info{
     display: flex;
@@ -391,7 +413,7 @@
     font-size: 16px;
     margin: 5px 10px;
 }
-.chat-dialog .chat-main .user-info .nick-name[inputting]:after{
+.chat-dialog .chat-main .user-info .nick-name.inputting:after{
     content: "正在输入中...";
     width: 100px;
     font-size: 12px;
@@ -419,14 +441,15 @@
 }
 .chat-dialog .chat-main .msg-show li{
     overflow:hidden;
+    margin-bottom: 20px;
 }
-.chat-dialog .chat-main .msg-show li * {
+.chat-dialog .chat-main .msg-show li>* {
     float: left;
 }
-.chat-dialog .chat-main .msg-show li.mine *{
+.chat-dialog .chat-main .msg-show li.mine>*{
     float: right;
 }
-.chat-dialog .chat-main .msg-show li img {
+.chat-dialog .chat-main .msg-show li>img {
     width: 35px;
     height: 35px;
     border-radius: 50%;
@@ -446,11 +469,14 @@
 .chat-dialog .chat-main .msg-show li .content {
     position: relative;
     background: #e1e1e1;
-    padding: 10px;
+    padding: 5px;
     margin: -10px 50px 0;
     border-radius: 3px;
     clear: both;
     line-height: 25px;
+}
+.chat-dialog .chat-main .msg-show li .content img {
+    margin: 0 2px;
 }
 .chat-dialog .chat-main .msg-show li .content:after {
     position: absolute;
@@ -508,4 +534,20 @@
     border: none;
     border-radius: 5%;
     cursor: pointer;
+}
+
+.chat-dialog .chat-face{
+    position: absolute;
+    padding: 10px;
+    width: 368px;
+    height: 194px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 5px #aaa;
+}
+.chat-dialog .chat-face li{
+    display: inline-block;
+    border: 1px solid #e8e8e8;
+    margin: 0px 0px -1px -1px;
+    cursor: pointer;
+    padding: 3px;
 }
