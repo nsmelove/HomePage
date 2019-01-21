@@ -1,9 +1,86 @@
-layui.define(['element',"jquery","laytpl","layer","util"], function(exports){
+layui.extend({
+    "crypto-js": "crypto-js/core",
+    "hmac": "crypto-js/hmac",
+    "sha1": "crypto-js/sha1",
+    "cos-js": "cos-js-sdk-v5"
+}).define(function(exports){
+    exports("crypto-js","");
+    exports("hmac","");
+    exports("sha1","");
+    exports("cos-js","");
+}).define(["jquery","laytpl", "layer", "util","crypto-js","hmac","sha1", "cos-js"], function(exports){
     const $ = layui.jquery;
-    const element = layui.element;
+    //console.log($.ajaxSettings);
+    //const element = layui.element;
     const laytpl = layui.laytpl;
     const layer = layui.layer;
     const util = layui.util;
+    const cosBuket = "img-1254458373";
+    const cosHost = "https://img-1254458373.cos.ap-guangzhou.myqcloud.com";
+    const secretId = "AKIDdCZluteVCleR2RLeCeu1F3kFaormi4Rb";
+    const secretKey = "APVQ9PZYM6kCfy8A3mKhy50kU4Thlvyq";
+
+    /**
+     * 构建鉴权字段
+     *
+     * q-sign-algorithm	sha1	签名算法，目前仅支持 sha1，即为 sha1 。	是
+     * q-ak	参数[SecretID]	帐户 ID，即 SecretId，在访问管理控制台的 API 密钥管理 页面可获取。
+     * 例如：AKIDQjz3ltompVjBni5LitkWHFlFpwkn9U5q 。	是
+     * q-sign-time	参数[SignTime]	本签名的有效起止时间，通过 Unix 时间戳 描述起始和结束时间，以秒为单位，格式为 [start-seconds];[end-seconds]。
+     * 例如： 1480932292;1481012298 。	是
+     * q-key-time	参数[KeyTime]	与 q-sign-time 值相同。	是
+     * q-header-list	参数[SignedHeaderList]	HTTP 请求头部。需从 key:value 中提取部分或全部 key，且 key 需转化为小写，并将多个 key 之间以字典顺序排序，如有多组 key，可用“;”连接。
+     * 例如： HTTP 请求 “ Host: bucket1-1254000000.cos.ap-beijing.myqcloud.com Content-Type: image/jpeg ”，其 SignedHeaderList 为 content-type;host 。	是
+     * q-url-param-list	参数[SignedParameterList]	HTTP 请求参数。需从 key=value 中提取部分或全部 key，且 key 需转化为小写，并将多个 key 之间以字典顺序排序，如有多组 key，可用“;”连接。
+     * 例如： HTTP 请求 “ GET /?prefix=abc&max-keys=20 ” ，其则 SignedParameterList 为 max-keys;prefix 或者 prefix 。	是
+     * q-signature	参数[Signature]	HTTP 内容签名，请查看 Signature 计算。
+     * @param uri
+     * @param header
+     * @param param
+     */
+    function authorization(uri, header, param){
+        let nowTime = Math.round(new Date().getTime() / 1000);
+        let qSignTime = nowTime + ";"+ (nowTime + 600);
+        let qKeyTime = qSignTime;
+        let httpHeaders = function(){
+            let headerStr ="";
+            for(let key in header){
+                headerStr += key + "=" + header[key] + ";";
+            }
+            headerStr.length > 0 && (headerStr =  headerStr.substr(0, headerStr.length - 1));
+            return headerStr.toLowerCase();
+        }();
+        let httpParameters = function(){
+            let paramStr ="";
+            for(let key in param){
+                paramStr += key + "=" + param[key] + ";";
+            }
+            paramStr.length > 0 && (paramStr.length =  paramStr.length -1);
+            return paramStr.toLowerCase();
+        }();
+        /**
+         * SignKey = HMAC-SHA1(SecretKey,"[q-key-time]")
+         * HttpString = [HttpMethod]\n[HttpURI]\n[HttpParameters]\n[HttpHeaders]\n
+         * StringToSign = [q-sign-algorithm]\n[q-sign-time]\nSHA1-HASH(HttpString)\n
+         * Signature = HMAC-SHA1(SignKey,StringToSign)
+         * */
+        let signKey = CryptoJS.HmacSHA1(qKeyTime, secretKey).toString();
+        let httpString = "put\n" + uri + "\n" + httpParameters + "\n" + httpHeaders + "\n";
+        let stringToSign = "sha1\n" + qSignTime + "\n" + CryptoJS.SHA1(httpString) + "\n";
+        let signature = CryptoJS.HmacSHA1(stringToSign, signKey).toString()
+        let authorization = [
+                "q-sign-algorithm=sha1",
+                "&q-ak=" + secretId,
+                "&q-sign-time=" + qSignTime,
+                "&q-key-time=" + qKeyTime,
+                "&q-header-list=" + Object.keys(header).join(";").toLowerCase(),
+                "&q-url-param-list=" + Object.keys(param).join(";").toLowerCase(),
+                "&q-signature=" + signature
+            ].join("");
+
+        return authorization;
+    }
+    //console.log(CryptoJS.HmacSHA1(secretKey, new Date().getTime()+"").toString());
     /**联系人模板*/
     const tplContacts =
         ['<div id ="chat-contact" class="contacts">',
@@ -35,6 +112,10 @@ layui.define(['element',"jquery","laytpl","layer","util"], function(exports){
                     '<li class="contact-refresh"><i class="layui-icon layui-icon-refresh" title="刷新"></i></li>',
                     '<li class="contact-about"><i class="layui-icon layui-icon-set" title="设置"></i></li>',
                 '</ul>',
+                '<div class="input">',
+                    '<input type="text"/>',
+                    '<i class="close layui-icon layui-icon-close"></i>',
+                '</div>',
             '</div>',
         '</div>'].join("");
     const tplGrouping =
@@ -141,55 +222,56 @@ layui.define(['element',"jquery","laytpl","layer","util"], function(exports){
         }
     }
     let Im = function(){};
-    Im.prototype.init = function(user, contFunc, groupFunc, chatHisFunc, msgHisFunc){
+    /**user, contFunc, groupFunc, chatHisFunc, msgHisFunc*/
+    Im.prototype.init = function(conifg){
         let that = this;
         let $contacts = $(".contacts");
         if($contacts.length > 0) {
             return ;
         }
-        this.user = user;
-        this.contFunc = contFunc ? function(callback){
+        this.user = conifg.user;
+        this.contFunc = conifg.contFunc ? function(callback){
             let data = storeData(StoreType.StoreContact);
             if(data){
                 callback(data);
             }else {
-                contFunc(function(data){
+                conifg.contFunc(function(data){
                     storeData(StoreType.StoreContact, data);
                     callback(data);
                 });
             }
         } : undefined;
-        this.groupFunc = groupFunc ? function(callback){
+        this.groupFunc = conifg.groupFunc ? function(callback){
             let data = storeData(StoreType.StoreGroup);
             if(data) {
                 callback(data);
             }else{
-                groupFunc(function(data){
+                conifg.groupFunc(function(data){
                     storeData(StoreType.StoreGroup, data);
                     callback(data);
                 });
             }
         } : undefined;
-        this.chatHisFunc = chatHisFunc ? function(callback){
+        this.chatHisFunc = conifg.chatHisFunc ? function(callback){
             let data = storeData(StoreType.StoreChatHis);
             if(data){
                 callback(data);
             }else {
-                chatHisFunc(function(data){
+                conifg.chatHisFunc(function(data){
                     storeData(StoreType.StoreChatHis, data);
                     callback(data);
                 });
             }
         } : undefined;
         /**消息倒序查询*/
-        this.msgHisFunc = msgHisFunc ? function(id, lastMsgId, limit, callback){
+        this.msgHisFunc = conifg.msgHisFunc ? function(id, lastMsgId, limit, callback){
             if(lastMsgId == undefined){
                 lastMsgId = 0;
             }
             let data = storeData(StoreType.StoreMsgHis(id));
             /**要查询的数据不在本地*/
             if(lastMsgId = 0 || !data || lastMsgId > data[0]){
-                msgHisFunc(id, lastMsgId, limit, function(callBackData){
+                conifg.msgHisFunc(id, lastMsgId, limit, function(callBackData){
                     if(callBackData && callBackData.length > 0){
                         if(!data){
                             //本地没有数据直接存储
@@ -243,7 +325,7 @@ layui.define(['element',"jquery","laytpl","layer","util"], function(exports){
                         callback.push(data[i]);
                     }else{
                         //本地数据存储空，表示要从网络取数据补充
-                        msgHisFunc(id, i - 1 >= 0 ? data[i - 1].id : 0, limit, function(cbData){
+                        conifg.msgHisFunc(id, i - 1 >= 0 ? data[i - 1].id : 0, limit, function(cbData){
                             if(cbData && cbData.length > 0){
                                 for(let j = 0; i< cbData.length; j++){
                                     if(i+1 >= data.length || cbData[j].id > data[i+1].id){
@@ -281,7 +363,7 @@ layui.define(['element',"jquery","laytpl","layer","util"], function(exports){
             }
         };
 
-        laytpl(tplContacts).render(user, function(html){
+        laytpl(tplContacts).render(that.user, function(html){
             $(document.body).append(html);
             $contacts = $(".contacts");
             $contacts.css({
@@ -291,7 +373,7 @@ layui.define(['element',"jquery","laytpl","layer","util"], function(exports){
                 left: $(window).width() - $contacts.width(),
                 top: $(window).height() - $contacts.height()
             });
-            if(contFunc){
+            if(that.contFunc){
                 that.renderContact();
             }
             /**更换图像*/
@@ -299,12 +381,22 @@ layui.define(['element',"jquery","laytpl","layer","util"], function(exports){
                 $contacts.find(".upload-icon input[type='file']").click();
             });
             $contacts.on("change", ".upload-icon input[type='file']", function(){
+                let that = this;
                 let iconImg = this.files[0];
-                let fr = new FileReader();
-                fr.readAsDataURL(iconImg);
-                fr.onload = function(){
-                    $contacts.find(".user-info img").attr("src", fr.result);
-                }
+                let imgSuffix = iconImg.name.substr(iconImg.name.lastIndexOf("."));
+                let uri = "/" + CryptoJS.SHA1(Math.random()+"") + imgSuffix;
+                let url = cosHost + uri;
+                console.log(Math.random());
+                let xhr = new XMLHttpRequest();
+                xhr.open("put", url, true);
+                xhr.setRequestHeader("Authorization", authorization(uri, {}, {}));
+                xhr.send(iconImg);
+                xhr.onreadystatechange = function(){
+                    if (xhr.readyState==4)
+                    {
+                        $contacts.find(".user-info img").attr("src", url);
+                    }
+                };
             });
 
             /**tab切换*/
@@ -374,7 +466,18 @@ layui.define(['element',"jquery","laytpl","layer","util"], function(exports){
             });
 
             /**关闭窗口*/
-            $contacts.on("click", ".layui-icon-close", function(){that.hide()});
+            $contacts.on("click", ".contacts-head .layui-icon-close", function(){that.hide()});
+            /**工具栏搜索*/
+            $contacts.on("click", ".contacts-tool .contact-search", function(){
+                $contacts.find(".contacts-tool .input").show().find("input").focus().attr("placeholder", "搜索我的联系人");
+            });
+            $contacts.on("click", ".contacts-tool .input .close", function(){
+                $(this).parent().hide().find("input").val("");
+            });
+            /**工具栏添加*/
+            $contacts.on("click", ".contacts-tool .contact-add", function(){
+                $contacts.find(".contacts-tool .input").show().find("input").focus().attr("placeholder", "搜索添加联系人");
+            });
 
             /**打开聊天对话框*/
             $contacts.on("click", ".contacts-content li", function(){

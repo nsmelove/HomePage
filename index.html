@@ -169,7 +169,7 @@
     <script>
         layui.config({
             base:"js/"
-        }).use(["element","jquery","laytpl","poper","im"], function(){
+        }).use(["poper","im"], function(){
             var $ = layui.jquery;
             var poper =layui.poper;
             var im = layui.im;
@@ -178,22 +178,34 @@
             var userInfo = {
                 userId: 110,
                 name: "上善若水",
-                sign: "已开消息免打扰，有什么事情，亲电话call我"
+                sign: "已开消息免打扰，有什么事情，亲电话call我",
+                img: "https://img-1254458373.cos.ap-guangzhou.myqcloud.com/headImg/2cab09032f73b0fd"
             };
             function getContacts(callback){
-                setTimeout(()=>$.get("json/contact_list.json", callback), 200);
-            };
+                setTimeout(function(){
+                    $.get("json/contact_list.json", callback)
+                }, 200);
+            }
             function getGroup(callback){
-                setTimeout(()=>$.get("json/group_list.json", callback), 100);
-            };
+                setTimeout(function(){
+                    $.get("json/group_list.json", callback)
+                }, 100);
+            }
             function getHis(callback){
-                setTimeout(()=>$.get("json/history_list.json", callback), 100);
-            };
+                setTimeout(function(){
+                    $.get("json/history_list.json", callback)
+                }, 100);
+            }
             function getMsgHis(userId, lastMsgId, limit, callback){
                 return [];
-            };
-            im.init(userInfo, getContacts, getGroup, getHis, undefined);
-            im.init(userInfo, getContacts, getGroup, getHis, undefined);
+            }
+            im.init({
+                user: userInfo,
+                contFunc: getContacts,
+                groupFunc: getGroup,
+                chatHisFunc: getHis,
+                msgHisFunc: undefined
+            });
         });
     </script>
 </body>
